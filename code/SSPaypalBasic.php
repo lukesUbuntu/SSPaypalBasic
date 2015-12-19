@@ -70,8 +70,30 @@ class SSPaypalBasicController extends Controller
 
     }
     public function thankyou($data){
-        echo "Thank you we will be in touch soon!";
-        echo "<script>localStorage.clear();location.href='../products';</script>";
+
+        $first_name = $data->postVar('first_name');
+        $address_city = $data->postVar('address_city');
+        $address_street = $data->postVar('address_street');
+        $num_cart_items = $data->postVar('num_cart_items');
+
+        //add items to order for emailing out
+        $items = [];
+
+        for($x = 1; $x <= $num_cart_items; $x++){
+            $item['name'] = $data->postVar("item_name$x");
+            $item['qnty'] = $data->postVar("quantity$x");
+            $item['cost'] = $data->postVar("mc_gross_$x");
+
+            $items[] = $item;
+        }
+
+        echo "Thank you $first_name for your purchase, we will be in touch with you soon!";
+
+        echo "<script>localStorage.clear();
+        setTimeout(function(){
+         location.href='../products';
+        },5000)
+        </script>";
     }
 
     public function checkout($data)

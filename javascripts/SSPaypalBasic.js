@@ -16,7 +16,7 @@ var Settings = {
     , handling_cart : 0//(0*1).toFixed(2)
     , charset		: "utf-8"
     , notify_url    : 'http://persianfeast.nzhost.me/ipn/index.php'
-    , return     : 'http://persianfeast.nzhost.me/SSPaypalBasic/thankyou'
+    , return     : 'http://persianfeast.nzhost.me/sspaypalbasic/thankyou'
     , cbt        : 'Return to the Store'
     , cancel_return : 'http://persianfeast.nzhost.me/SSPaypalBasic/canceled'
 };
