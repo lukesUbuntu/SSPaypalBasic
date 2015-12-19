@@ -71,6 +71,7 @@ class SSPaypalBasicController extends Controller
     }
     public function thankyou($data){
 
+        if ($data->postVar('verify_sign')){
         $first_name = $data->postVar('first_name');
         $address_city = $data->postVar('address_city');
         $address_street = $data->postVar('address_street');
@@ -87,7 +88,11 @@ class SSPaypalBasicController extends Controller
             $items[] = $item;
         }
 
-        echo "Thank you $first_name for your purchase, we will be in touch with you soon!";
+        echo "Thank you $first_name for your purchase, we will be in touch with you soon!<br/><br/>Returning you back to main site please wait.";
+
+        }else{
+            echo "Incorrect Data, returning you back to main site";
+        }
 
         echo "<script>localStorage.clear();
         setTimeout(function(){

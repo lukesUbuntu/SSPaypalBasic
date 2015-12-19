@@ -119,7 +119,7 @@ function processCart(){
     console.log("Loaded cartItems from storage",cartItems)
     //loop items
     $.map(cartItems,addRow);
-    $("#cartItemsPaypalTotal").text(calculateTotal());
+    $("#cartItemsPaypalTotal").text("$"+calculateTotal());
     checkCart();
 }
 
