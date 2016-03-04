@@ -16,7 +16,7 @@ var Settings = {
     , handling_cart : 0//(0*1).toFixed(2)
     , charset		: "utf-8"
     , notify_url    : 'http://persianfeast.nzhost.me/ipn/index.php'
-    , return     : 'http://persianfeast.nzhost.me/sspaypalbasic/thankyou'
+    , return     : 'http://localhost/git/PersianFeast/thankyou'
     , cbt        : 'Return to the Store'
     , cancel_return : 'http://persianfeast.nzhost.me/SSPaypalBasic/canceled'
 };
@@ -119,7 +119,11 @@ function processCart(){
     console.log("Loaded cartItems from storage",cartItems)
     //loop items
     $.map(cartItems,addRow);
+
     $("#cartItemsPaypalTotal").text("$"+calculateTotal());
+    $("#cartItemsPaypalShipping").text("$"+ Settings.handling_cart.toFixed(2));
+
+
     checkCart();
 }
 
@@ -133,13 +137,14 @@ function calculateTotal(){
             currentTotal = currentTotal + parseFloat(item.price) * parseInt(item.qty)
         });
 
-    return currentTotal.toFixed(2);
+    return (currentTotal + Settings.handling_cart).toFixed(2);
 }
 
 /**
  * Adds a row to the shopping cart parsed my $.map
  * @param data
  */
+
 function addRow(item,index){
 
     var item_code = (item.code.length > 1) ? item.code : index;
@@ -152,6 +157,8 @@ function addRow(item,index){
         '<td width="10" style="padding-left: 10px;"><p style="color: #555">$' + item.price + '</p></td>' +
         '<td width="10"><i data-item_code="' + item_code + '" class="fa fa-remove cartRemove"></i></td>' +
         '</tr>';
+
+    Settings.handling_cart = Settings.handling_cart + parseInt(item.qty  * 8);
     /*
      @see to checkOut
      */
@@ -188,6 +195,7 @@ function checkOut(){
     $form.attr('method', 'POST');
 
     var counter = 1;
+    var shipping = 1;
     $.each(cartItems, function (index, item) {
       //name: "Chargrilled Eggplant Dip", price: "12.00", code: 5, qty: 1}
 
@@ -197,6 +205,7 @@ function checkOut(){
         data["item_name_" + counter] = item.name;
 
         data["quantity_" + counter] = item.qty;
+        //shipping = parse(shipping + item.qty);
         data["amount_" + counter] = (item.price * 1).toFixed(2);
         data["item_number_" +counter++] = item.code;
 
@@ -204,6 +213,10 @@ function checkOut(){
 
        // counter++;
     });
+    //add handling
+    //Settings.handling_cart = (shipping * 8).toFixed(2);;
+    Settings.handling_cart = Settings.handling_cart.toFixed(2);;
+
     //append our settings
     $form.append(createHiddenInput(Settings));
     console.log("form",$form.html());
